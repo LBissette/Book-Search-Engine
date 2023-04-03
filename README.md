@@ -4,6 +4,8 @@
 
 This was originally a Google Books API search engine build with a RESTful API. It has been refactoredto be a GraphQL API built with Apollo Server. The app was built using the MERN stack, with a React front end, MongoDB database, and Node.js/Express.js server and API.
 
+![Screenshot](client\public\Book-Search-Engine.png "Screenshot")
+
 ## Table of Contents
 
 - [Installation](#installation)
