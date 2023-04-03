@@ -1,10 +1,10 @@
-import { verify, sign } from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
 // set token secret and expiration date
 const secret = "mysecretsshhhhh";
 const expiration = "2h";
 
-import { AuthenticationError } from "apollo-server-express";
+const { AuthenticationError } = require("apollo-server-express");
 
 const authMiddleware = (context) => {
   let token;
@@ -12,10 +12,12 @@ const authMiddleware = (context) => {
     token = context.req.headers.authorization.split("Bearer ")[1];
   }
 
+  // check if the operation name is "login"
   if (
     context.req.body.operationName === "login" ||
     context.req.body.operationName === "addUser"
   ) {
+    // if it is, don't throw an error and skip the middleware
     return context;
   }
 
@@ -24,7 +26,7 @@ const authMiddleware = (context) => {
   }
 
   try {
-    const { data } = verify(token, secret, { maxAge: expiration });
+    const { data } = jwt.verify(token, secret, { maxAge: expiration });
     context.user = data;
   } catch (err) {
     console.log(err);
@@ -37,7 +39,7 @@ const authMiddleware = (context) => {
 const signToken = ({ username, email, _id }) => {
   const payload = { username, email, _id };
 
-  return sign({ data: payload }, secret, { expiresIn: expiration });
+  return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
 };
 
-export default { authMiddleware, signToken };
+module.exports = { authMiddleware, signToken };
